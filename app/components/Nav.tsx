@@ -2,7 +2,7 @@ import React from "react";
 
 const Nav = () => {
   return (
-    <div className="w-full h-20 flex align-center  justify-between">
+    <div className="w-full h-20 flex align-center  ">
       <div className="flex items-center p-4 bg-gray-100 w-100">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -19,7 +19,7 @@ const Nav = () => {
           />
         </svg>
         <p className="ml-2 text-lg font-bold text-indigo-700 italic">
-          Movie 69{" "}
+          Movie 69
         </p>
       </div>
       <div className="w-full h-full p-4 bg-gray-100 flex content-center items-center ">

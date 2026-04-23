@@ -6,6 +6,8 @@ import Herosection from "./components/Herosection";
 import Upcoming from "./components/Upcoming";
 import Popular from "./components/Popular";
 import Top from "./components/Top";
+import Nav from "./components/Nav";
+import Genre from "./components/Genre";
 
 export default function Home() {
   const [movies, setMovies] = useState([]);
@@ -31,7 +33,13 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-zinc-950">
-      <main className="mx-auto max-w-5xl px-6 py-4 space-y-10">
+      <Genre
+        genreIds={
+          movies.slice(0, 20).flatMap((movie: any) => movie.genre_ids) || []
+        }
+      />
+      <Nav />
+      <main className="mx-auto max-w-6xl px-6 py-4 space-y-10">
         <Herosection movie={movies[0]} />
         <div>
           <Upcoming movies={movies.slice(0, 20)} />{" "}
