@@ -1,6 +1,7 @@
 import React from "react";
+import Genre from "./Genre";
 
-const Nav = () => {
+const Nav = ({ onGenreToggle }: { onGenreToggle: () => void }) => {
   return (
     <div className="w-full h-20 flex align-center  ">
       <div className="flex items-center p-4 bg-gray-100 w-100">
@@ -22,8 +23,12 @@ const Nav = () => {
           Movie 69
         </p>
       </div>
-      <div className="w-full h-full p-4 bg-gray-100 flex content-center items-center ">
-        <div>
+      <div
+        onClick={onGenreToggle}
+        className="w-full h-full p-4 bg-gray-100 flex content-center items-center "
+      >
+        {/* genre button// */}
+        <div className="relative">
           <svg
             width="101"
             height="40"

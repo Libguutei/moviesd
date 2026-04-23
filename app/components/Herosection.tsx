@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { MovieCard } from "./MovieCards";
 
 export default function Herosection({ movie }: { movie: any[] }) {
+  const [index, setIndex] = useState(0);
   if (!movie) return null;
   const backdropUrl = `https://image.tmdb.org/t/p/original${movie.backdrop_path}`;
   return (

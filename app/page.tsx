@@ -8,8 +8,10 @@ import Popular from "./components/Popular";
 import Top from "./components/Top";
 import Nav from "./components/Nav";
 import Genre from "./components/Genre";
+import Adult from "./components/Adult";
 
 export default function Home() {
+  const [isGenreOpen, setIsGenreOpen] = useState(false);
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,15 +35,23 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-zinc-950">
-      <Genre
+      {/* <Genre
         genreIds={
           movies.slice(0, 20).flatMap((movie: any) => movie.genre_ids) || []
         }
-      />
-      <Nav />
-      <main className="mx-auto max-w-6xl px-6 py-4 space-y-10">
-        <Herosection movie={movies[0]} />
+      /> */}
+      <Nav onGenreToggle={() => setIsGenreOpen(!isGenreOpen)} />
+      <main className="mx-auto max-w-1xl px-6 py-4 space-y-10">
+        {isGenreOpen && (
+          <div className="absolute top-0 left-0 z-50 justify-center">
+            <Genre className="absolute z-1 left-82 top-14 bg-gray-100 display-none" />
+          </div>
+        )}
+        <Herosection movie={movies[(1, 3)]} />
         <div>
+          <div>
+            <Adult movies={movies.slice(0, 20)} />
+          </div>
           <Upcoming movies={movies.slice(0, 20)} />{" "}
         </div>
         <div>
