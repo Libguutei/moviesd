@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { MovieCard } from "./components/MovieCards";
 import Herosection from "./components/Herosection";
 import Upcoming from "./components/Upcoming";
 import Popular from "./components/Popular";
@@ -14,12 +13,8 @@ export default function Home() {
   const [isGenreOpen, setIsGenreOpen] = useState(false);
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [visible, setVisible] = useState(5);
+  const [visible] = useState(5);
   const [search, setSearch] = useState("");
-
-  const handleSeeMore = () => {
-    setVisible((prev) => prev + 5);
-  };
 
   useEffect(() => {
     axios
@@ -40,7 +35,7 @@ export default function Home() {
     return <div className="p-20 text-center font-bold">bitching...</div>;
 
   return (
-    <div className="min-h-screen bg-white dark:bg-zinc-950">
+    <div className="min-h-screen bg-white ">
       {/* <Genre
         genreIds={
           movies.slice(0, 20).flatMap((movie: any) => movie.genre_ids) || []
@@ -58,33 +53,18 @@ export default function Home() {
             <Genre className="absolute z-1 left-82 top-14 bg-gray-100 display-none" />
           </div>
         )}
-        <Herosection
-          movies={movies.slice(0, 5)}
-          handleSeeMore={handleSeeMore}
-        />
+        <Herosection movies={movies.slice(0, 5)} />
         <div>
           <div>
-            <Adult
-              movies={movies.slice(0, visible)}
-              handleSeeMore={handleSeeMore}
-            />
+            <Adult movies={movies.slice(0, visible)} />
           </div>
-          <Upcoming
-            movies={movies.slice(0, visible)}
-            handleSeeMore={handleSeeMore}
-          />{" "}
+          <Upcoming movies={movies.slice(0, visible)} />{" "}
         </div>
         <div>
-          <Popular
-            movies={movies.slice(0, visible)}
-            handleSeeMore={handleSeeMore}
-          />
+          <Popular movies={movies.slice(0, visible)} />
         </div>
         <div>
-          <Top
-            movies={movies.slice(0, visible)}
-            handleSeeMore={handleSeeMore}
-          />
+          <Top movies={movies.slice(0, visible)} />
         </div>
       </main>
     </div>

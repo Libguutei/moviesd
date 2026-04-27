@@ -39,7 +39,7 @@ const Nav = ({ onGenreToggle, search, setSearch, movies }: NavProps) => {
         >
           Genre
         </button>
-        <div className="relative w-[379px] max-w-sm">
+        <div className="relative w-94.75 max-w-sm">
           <input
             type="text"
             value={search}
@@ -49,7 +49,7 @@ const Nav = ({ onGenreToggle, search, setSearch, movies }: NavProps) => {
           />
 
           {search && search.length > 0 && (
-            <div className="absolute top-full left-0 mt-1 z-[999]">
+            <div className="absolute top-full left-0 mt-1 z-999">
               <SearchResult movies={movies} search={search} />
             </div>
           )}

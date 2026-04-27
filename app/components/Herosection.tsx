@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState } from "react";
@@ -45,11 +47,11 @@ export default function Herosection({ movies }: { movies: any[] }) {
           alert("We dont have a trailer for this bitch ass movie");
         }
       })
-      .catch((err) => console.error("Erorrrrrr kisda err"));
+      .catch(() => console.error("Failed to fetch trailer"));
   };
 
   return (
-    <div className="relative w-full h-[600px] overflow-hidden rounded-xl bg-black">
+    <div className="relative w-full h-150 overflow-hidden rounded-xl bg-black">
       {/* BG  */}
       <img
         src={backdropUrl}
@@ -57,7 +59,7 @@ export default function Herosection({ movies }: { movies: any[] }) {
         className="w-full h-full object-cover opacity-60 transition-all duration-500"
       />
 
-      <div className="absolute inset-0 flex flex-col justify-end p-10 bg-gradient-to-t from-black/80 to-transparent">
+      <div className="absolute inset-0 flex flex-col justify-end p-10 bg-linear-to-t from-black/80 to-transparent">
         <h1 className="text-4xl font-bold text-white mb-2">
           {currentMovie?.title}
         </h1>

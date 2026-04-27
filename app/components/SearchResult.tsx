@@ -5,27 +5,25 @@ const SearchResult = ({
   movies: any[];
   search: string;
 }) => {
-  const safeMovies = movies || [];
-
-  if (safeMovies.length === 0) return null;
+  if (movies.length === 0) return null;
 
   return (
-    <div className="absolute top-full left-0 mt-2 w-[577px] max-h-[600px] overflow-y-auto rounded-lg bg-white dark:bg-zinc-900 shadow-2xl border border-gray-100 z-[999]">
+    <div className="absolute top-full left-0 mt-2 w-144.25 max-h-150 overflow-y-auto rounded-lg bg-white dark:bg-zinc-900 shadow-2xl border border-gray-100 z-999">
       <div className="p-2">
-        {safeMovies.slice(0, 5).map((movie) => (
+        {movies.slice(0, 5).map((movie) => (
           <div
             key={movie.id}
             className="flex items-center gap-4 p-3 hover:bg-gray-50 dark:hover:bg-zinc-800 cursor-pointer rounded-md border-b border-gray-50 last:border-0"
           >
             {/* poster */}
-            <div className="w-[60px] h-[80px] bg-gray-200 rounded overflow-hidden flex-shrink-0">
-              {movie.poster_path ? (
+            <div className="w-15 h-20 bg-gray-200 rounded overflow-hidden shrink-0">
+              {movie.poster_path && (
                 <img
                   src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
                   alt={movie.title}
                   className="w-full h-full object-cover"
                 />
-              ) : null}
+              )}
             </div>
 
             {/* description */}
@@ -48,7 +46,7 @@ const SearchResult = ({
 
       <div className="p-4 border-t border-gray-100 bg-gray-50 dark:bg-zinc-900/50">
         <p className="text-sm font-medium text-center text-gray-600 hover:text-indigo-600 cursor-pointer">
-          See all results for "{search}"
+          See all results for {search}
         </p>
       </div>
     </div>

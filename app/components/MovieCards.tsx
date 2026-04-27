@@ -3,7 +3,7 @@ export const MovieCard = ({ movie }: { movie: any }) => {
 
   return (
     <div className="group cursor-pointer space-y-3">
-      <div className="aspect-[2/3] overflow-hidden rounded-xl bg-zinc-200">
+      <div className="aspect-2/3 overflow-hidden rounded-xl bg-zinc-900">
         <img
           src={
             movie.poster_path
@@ -19,7 +19,7 @@ export const MovieCard = ({ movie }: { movie: any }) => {
           <span>★</span>
           <span>{movie.vote_average?.toFixed(1)}</span>
         </div>
-        <h3 className="line-clamp-1 font-semibold text-zinc-900 dark:text-zinc-100">
+        <h3 className="line-clamp-1 font-semibold text-zinc-900 dark:text-zinc-900">
           {movie.title}
         </h3>
       </div>

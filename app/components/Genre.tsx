@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -15,7 +16,7 @@ const Genre = ({ className = "" }) => {
   }, []);
 
   return (
-    <div className={`w-[577px] py-2 h-100 rounded-2xl ${className}`}>
+    <div className={`w-144.25 py-2 h-100 rounded-2xl ${className}`}>
       <div className="p-5">
         <h1 className="text-black text-2xl font-bold mb-2">Genres</h1>
         <p className="mb-5 text-gray-600">See lists of movies by genre</p>

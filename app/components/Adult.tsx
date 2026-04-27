@@ -1,7 +1,8 @@
 import React from "react";
 import { MovieCard } from "./MovieCards";
+import { Movie } from "../types";
 
-const Adult = ({ movies }: { movies: any[] }) => {
+const Adult = ({ movies }: { movies: Movie[] }) => {
   const adultMovies = movies.filter((movie) => {
     return movie.adult === true;
   });
@@ -13,7 +14,7 @@ const Adult = ({ movies }: { movies: any[] }) => {
             Adult Content
           </h2>
           <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-            {adultMovies.map((movie: any) => (
+            {adultMovies.map((movie: Movie) => (
               <MovieCard key={movie.id} movie={movie} />
             ))}
           </div>

@@ -65,4 +65,4 @@ const Top = ({ movies }: { movies: any[] }) => {
   );
 };
 
-export default SeeMore;
+export default Top;

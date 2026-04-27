@@ -1,11 +1,8 @@
 import React from "react";
-import Nav from "./Nav";
 
 const GenreFilter = () => {
   return (
-    <div>
-      <Nav />
-    </div>
+    <div>{/* GenreFilter component - Nav removed as it requires props */}</div>
   );
 };
 
