@@ -14,6 +14,12 @@ export default function Home() {
   const [isGenreOpen, setIsGenreOpen] = useState(false);
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [visible, setVisible] = useState(5);
+  const [search, setSearch] = useState("");
+
+  const handleSeeMore = () => {
+    setVisible((prev) => prev + 5);
+  };
 
   useEffect(() => {
     axios
@@ -40,25 +46,45 @@ export default function Home() {
           movies.slice(0, 20).flatMap((movie: any) => movie.genre_ids) || []
         }
       /> */}
-      <Nav onGenreToggle={() => setIsGenreOpen(!isGenreOpen)} />
+      <Nav
+        onGenreToggle={() => setIsGenreOpen(!isGenreOpen)}
+        search={search}
+        setSearch={setSearch}
+        movies={movies}
+      />
       <main className="mx-auto max-w-1xl px-6 py-4 space-y-10">
         {isGenreOpen && (
           <div className="absolute top-0 left-0 z-50 justify-center">
             <Genre className="absolute z-1 left-82 top-14 bg-gray-100 display-none" />
           </div>
         )}
-        <Herosection movie={movies[(1, 3)]} />
+        <Herosection
+          movies={movies.slice(0, 5)}
+          handleSeeMore={handleSeeMore}
+        />
         <div>
           <div>
-            <Adult movies={movies.slice(0, 20)} />
+            <Adult
+              movies={movies.slice(0, visible)}
+              handleSeeMore={handleSeeMore}
+            />
           </div>
-          <Upcoming movies={movies.slice(0, 20)} />{" "}
+          <Upcoming
+            movies={movies.slice(0, visible)}
+            handleSeeMore={handleSeeMore}
+          />{" "}
         </div>
         <div>
-          <Popular movies={movies.slice(0, 20)} />
+          <Popular
+            movies={movies.slice(0, visible)}
+            handleSeeMore={handleSeeMore}
+          />
         </div>
         <div>
-          <Top movies={movies.slice(0, 20)} />
+          <Top
+            movies={movies.slice(0, visible)}
+            handleSeeMore={handleSeeMore}
+          />
         </div>
       </main>
     </div>

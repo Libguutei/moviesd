@@ -17,7 +17,10 @@ const Adult = ({ movies }: { movies: any[] }) => {
               <MovieCard key={movie.id} movie={movie} />
             ))}
           </div>
-        </section>
+        </section>{" "}
+        <h1 className="text-center text-white col-span-full mt-4 font-bold justify-self-end hover:underline cursor-pointer">
+          See more{" "}
+        </h1>
       </div>
     </div>
   );

@@ -17,6 +17,9 @@ const Popular = ({ movies }: { movies: any[] }) => {
             {popularList.map((movie: any) => (
               <MovieCard key={movie.id} movie={movie} />
             ))}
+            <h1 className="text-center text-white col-span-full mt-4 font-bold justify-self-end hover:underline cursor-pointer">
+              See more{" "}
+            </h1>
           </div>
         </section>
       </div>
