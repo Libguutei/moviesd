@@ -1,3 +1,7 @@
+"use client";
+import React from "react";
+import Link from "next/link";
+
 const SearchResult = ({
   movies,
   search,
@@ -5,51 +9,43 @@ const SearchResult = ({
   movies: any[];
   search: string;
 }) => {
-  if (movies.length === 0) return null;
+  if (!search || !movies || movies.length === 0) return null;
 
   return (
-    <div className="absolute top-full left-0 mt-2 w-144.25 max-h-150 overflow-y-auto rounded-lg bg-white dark:bg-zinc-900 shadow-2xl border border-gray-100 z-999">
-      <div className="p-2">
-        {movies.slice(0, 5).map((movie) => (
-          <div
+    <div className="absolute top-full left-0 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-2xl overflow-hidden z-[9999] min-w-[300px]">
+      <div className="max-h-[450px] overflow-y-auto">
+        {movies.slice(movies).map((movie: any) => (
+          <Link
             key={movie.id}
-            className="flex items-center gap-4 p-3 hover:bg-gray-50 dark:hover:bg-zinc-800 cursor-pointer rounded-md border-b border-gray-50 last:border-0"
+            href={`/product/${movie.id}`}
+            className="flex items-center gap-3 p-3 hover:bg-indigo-50 border-b border-gray-100 last:border-0 transition-colors"
           >
-            {/* poster */}
-            <div className="w-15 h-20 bg-gray-200 rounded overflow-hidden shrink-0">
-              {movie.poster_path && (
+            <div className="w-10 h-14 flex-shrink-0 bg-gray-200 rounded">
+              {movie.poster_path ? (
                 <img
                   src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
                   alt={movie.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover rounded"
                 />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-400">
+                  No Pic
+                </div>
               )}
             </div>
-
-            {/* description */}
-            <div className="flex-1">
-              <h1 className="font-semibold text-sm line-clamp-1">
+            <div className="flex flex-col overflow-hidden text-left">
+              <span className="text-sm font-bold text-black truncate">
                 {movie.title}
-              </h1>
-              <div className="flex items-center gap-2 mt-1">
-                <span className="text-yellow-500 text-xs">
-                  ★ {movie.vote_average.toFixed(1)}
-                </span>
-                <span className="text-gray-400 text-xs">
-                  {movie.release_date?.split("-")[0]}
-                </span>
-              </div>
+              </span>
+              <span className="text-xs text-gray-500">
+                {movie.release_date?.split("-")[0] || "N/A"}
+              </span>
             </div>
-          </div>
+          </Link>
         ))}
-      </div>
-
-      <div className="p-4 border-t border-gray-100 bg-gray-50 dark:bg-zinc-900/50">
-        <p className="text-sm font-medium text-center text-gray-600 hover:text-indigo-600 cursor-pointer">
-          See all results for {search}
-        </p>
       </div>
     </div>
   );
 };
+
 export default SearchResult;

@@ -13,8 +13,11 @@ export default function Home() {
   const [isGenreOpen, setIsGenreOpen] = useState(false);
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [visible] = useState(5);
+  const [visible, setVisible] = useState(5);
   const [search, setSearch] = useState("");
+  const handleSeeMore = () => {
+    setVisible((prev) => prev + 5);
+  };
 
   useEffect(() => {
     axios

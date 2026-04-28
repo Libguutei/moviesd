@@ -1,140 +1,86 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import SearchResult from "./SearchResult";
+import Link from "next/link";
 
 interface NavProps {
-  onGenreToggle: () => void;
-  search: string;
-  setSearch: (val: string) => void;
-  movies: any[];
+  onGenreToggle?: () => void;
+  search?: string;
+  setSearch?: (val: string) => void;
+  movies?: any[];
 }
 
-const Nav = ({ onGenreToggle, search, setSearch, movies }: NavProps) => {
+const Nav = ({
+  onGenreToggle,
+  search: propSearch,
+  setSearch: propSetSearch,
+  movies: propMovies,
+}: NavProps) => {
+  const [localSearch, setLocalSearch] = useState("");
+  const [localMovies, setLocalMovies] = useState<any[]>([]);
+
+  const isControlled = propSearch !== undefined;
+  const currentSearch = isControlled ? propSearch : localSearch;
+  const currentMovies = isControlled ? propMovies || [] : localMovies;
+
+  const handleSearchChange = (val: string) => {
+    if (isControlled && propSetSearch) {
+      propSetSearch(val);
+    } else {
+      setLocalSearch(val);
+    }
+  };
+
+  useEffect(() => {
+    if (isControlled) return;
+
+    const fetchMovies = async () => {
+      if (localSearch.length > 1) {
+        const res = await fetch(
+          `https://api.themoviedb.org/3/search/movie?api_key=024dbea23ede015af364eba879a8b264&query=${localSearch}`,
+        );
+        const data = await res.json();
+        setLocalMovies(data.results || []);
+      } else {
+        setLocalMovies([]);
+      }
+    };
+
+    const delay = setTimeout(fetchMovies, 300);
+    return () => clearTimeout(delay);
+  }, [localSearch, isControlled]);
+
   return (
-    <nav className="flex items-center justify-between px-6 py-3 bg-white  border-b border-gray-200 shadow-sm">
+    <nav className="flex items-center justify-between px-6 py-3 bg-white border-b border-gray-200 shadow-sm relative z-[50]">
       <div className="flex items-center gap-2">
-        <svg
-          width="93"
-          height="20"
-          viewBox="0 0 93 20"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M5.83366 1.6665V18.3332M14.167 1.6665V18.3332M1.66699 9.99984H18.3337M1.66699 5.83317H5.83366M1.66699 14.1665H5.83366M14.167 14.1665H18.3337M14.167 5.83317H18.3337M3.48366 1.6665H16.517C17.5203 1.6665 18.3337 2.47985 18.3337 3.48317V16.5165C18.3337 17.5198 17.5203 18.3332 16.517 18.3332H3.48366C2.48034 18.3332 1.66699 17.5198 1.66699 16.5165V3.48317C1.66699 2.47985 2.48034 1.6665 3.48366 1.6665Z"
-            stroke="#4338CA"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-          <path
-            d="M30.2159 4.36364H33.25L35.1648 12.1818H35.3011L39.7955 4.36364H42.8295L40.8977 16H38.5114L39.7727 8.42614H39.6705L35.4205 15.9432H33.7898L32.0398 8.39773H31.9432L30.6705 16H28.2841L30.2159 4.36364ZM47.1538 16.1705C46.2637 16.1705 45.5269 15.9811 44.9436 15.6023C44.3602 15.2197 43.9493 14.6894 43.7106 14.0114C43.4758 13.3295 43.4322 12.536 43.5799 11.6307C43.7239 10.7367 44.0231 9.95455 44.4777 9.28409C44.9322 8.61364 45.5099 8.0928 46.2106 7.72159C46.9114 7.34659 47.7012 7.15909 48.5799 7.15909C49.4663 7.15909 50.2012 7.35038 50.7845 7.73295C51.3678 8.11174 51.7788 8.64205 52.0174 9.32386C52.2561 10.0057 52.3015 10.7992 52.1538 11.7045C52.0061 12.5947 51.703 13.375 51.2447 14.0455C50.7864 14.7159 50.2087 15.2386 49.5118 15.6136C48.8148 15.9848 48.0288 16.1705 47.1538 16.1705ZM47.3924 14.2955C47.8015 14.2955 48.1633 14.1799 48.4777 13.9489C48.7959 13.714 49.0591 13.3958 49.2674 12.9943C49.4796 12.589 49.6273 12.1307 49.7106 11.6193C49.794 11.1155 49.7996 10.6686 49.7277 10.2784C49.6557 9.88447 49.5042 9.57386 49.2731 9.34659C49.0459 9.11932 48.7334 9.00568 48.3356 9.00568C47.9265 9.00568 47.5629 9.12311 47.2447 9.35795C46.9265 9.58902 46.6633 9.9072 46.4549 10.3125C46.2466 10.7178 46.1008 11.178 46.0174 11.6932C45.9379 12.1932 45.9322 12.6402 46.0004 13.0341C46.0686 13.4242 46.2182 13.733 46.4493 13.9602C46.6803 14.1837 46.9947 14.2955 47.3924 14.2955ZM62.6414 7.27273L58.1357 16H55.4085L53.8119 7.27273H56.2778L57.0505 13.517H57.1414L59.988 7.27273H62.6414ZM62.7455 16L64.2001 7.27273H66.6205L65.166 16H62.7455ZM65.6603 6.13636C65.3004 6.13636 65.0031 6.01705 64.7682 5.77841C64.5372 5.53598 64.4425 5.24811 64.4841 4.91477C64.5258 4.57386 64.6887 4.28598 64.9728 4.05114C65.2569 3.8125 65.5788 3.69318 65.9387 3.69318C66.2985 3.69318 66.5921 3.8125 66.8194 4.05114C67.0466 4.28598 67.1413 4.57386 67.1035 4.91477C67.0656 5.24811 66.9046 5.53598 66.6205 5.77841C66.3402 6.01705 66.0201 6.13636 65.6603 6.13636ZM71.3794 16.1705C70.4855 16.1705 69.745 15.9886 69.1578 15.625C68.5707 15.2576 68.1578 14.7386 67.9192 14.0682C67.6844 13.3939 67.6446 12.5966 67.7999 11.6761C67.9514 10.7784 68.2563 9.99053 68.7147 9.3125C69.1768 8.63447 69.7563 8.10606 70.4533 7.72727C71.1503 7.34848 71.9268 7.15909 72.7828 7.15909C73.3586 7.15909 73.8794 7.25189 74.3453 7.4375C74.815 7.61932 75.2052 7.89583 75.5158 8.26705C75.8264 8.63447 76.0385 9.0947 76.1522 9.64773C76.2696 10.2008 76.2677 10.8485 76.1465 11.5909L76.0385 12.2557H68.6749L68.9078 10.7557H73.9987C74.0556 10.4072 74.0328 10.0985 73.9306 9.82955C73.8283 9.56061 73.6578 9.35038 73.4192 9.19886C73.1806 9.04356 72.887 8.96591 72.5385 8.96591C72.1825 8.96591 71.8491 9.05303 71.5385 9.22727C71.2279 9.40151 70.9666 9.63068 70.7544 9.91477C70.5461 10.1951 70.4116 10.5 70.351 10.8295L70.084 12.3182C70.0082 12.7765 70.0234 13.1572 70.1294 13.4602C70.2393 13.7633 70.4287 13.9905 70.6976 14.142C70.9666 14.2898 71.3075 14.3636 71.7203 14.3636C71.9893 14.3636 72.2412 14.3258 72.476 14.25C72.7147 14.1742 72.9268 14.0625 73.1124 13.9148C73.298 13.7633 73.4495 13.5758 73.5669 13.3523L75.7772 13.5C75.5726 14.0379 75.262 14.5076 74.8453 14.9091C74.4287 15.3068 73.9268 15.6174 73.3397 15.8409C72.7563 16.0606 72.1029 16.1705 71.3794 16.1705ZM81.2666 16L81.5166 14.5398L88.6814 6.39205H82.8461L83.187 4.36364H92.0961L91.8518 5.82386L84.6814 13.9716H90.5166L90.1757 16H81.2666Z"
-            fill="#4338CA"
-          />
-        </svg>
+        <Link href="/" className="font-bold text-indigo-600 text-xl">
+          MOVIE Z
+        </Link>
       </div>
+
       <div className="flex items-center gap-4">
         <button
-          onClick={onGenreToggle}
-          className="flex items-center gap-2 px-3 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition text-sm font-medium"
+          onClick={() =>
+            onGenreToggle ? onGenreToggle() : (window.location.href = "/")
+          }
+          className="px-3 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 text-sm font-medium text-black"
         >
           Genre
         </button>
-        <div className="relative w-94.75 max-w-sm">
+
+        <div className="relative w-[380px]">
           <input
             type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search..."
-            className="w-full pl-4 pr-10 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm"
+            value={currentSearch}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            placeholder="Search movies..."
+            className="w-full pl-4 pr-10 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm text-black"
           />
-
-          {search && search.length > 0 && (
-            <div className="absolute top-full left-0 mt-1 z-999">
-              <SearchResult movies={movies} search={search} />
-            </div>
-          )}
-
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 opacity-40">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.3-4.3" />
-            </svg>
-          </div>
-        </div>{" "}
+          {/* Энд SearchResult-ийг дуудаж байна */}
+          <SearchResult movies={currentMovies} search={currentSearch} />
+        </div>
       </div>
-
-      <button className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
-        <svg
-          width="40"
-          height="40"
-          viewBox="0 0 40 40"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g filter="url(#filter0_d_1370_181)">
-            <path
-              d="M2 11C2 5.47715 6.47715 1 12 1H28C33.5228 1 38 5.47715 38 11V27C38 32.5228 33.5228 37 28 37H12C6.47715 37 2 32.5228 2 27V11Z"
-              fill="white"
-              shape-rendering="crispEdges"
-            />
-            <path
-              d="M12 1.5H28C33.2467 1.5 37.5 5.7533 37.5 11V27C37.5 32.2467 33.2467 36.5 28 36.5H12C6.7533 36.5 2.5 32.2467 2.5 27V11C2.5 5.7533 6.7533 1.5 12 1.5Z"
-              stroke="#E4E4E7"
-              shape-rendering="crispEdges"
-            />
-            <path
-              d="M20 13C19.2044 13.7956 18.7574 14.8748 18.7574 16C18.7574 17.1252 19.2044 18.2044 20 19C20.7957 19.7956 21.8748 20.2426 23 20.2426C24.1252 20.2426 25.2044 19.7956 26 19C26 20.1867 25.6481 21.3467 24.9888 22.3334C24.3295 23.3201 23.3925 24.0892 22.2961 24.5433C21.1997 24.9974 19.9933 25.1162 18.8295 24.8847C17.6656 24.6532 16.5965 24.0818 15.7574 23.2426C14.9182 22.4035 14.3468 21.3344 14.1153 20.1705C13.8838 19.0067 14.0026 17.8003 14.4567 16.7039C14.9109 15.6075 15.6799 14.6705 16.6666 14.0112C17.6533 13.3519 18.8133 13 20 13Z"
-              stroke="#18181B"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </g>
-          <defs>
-            <filter
-              id="filter0_d_1370_181"
-              x="0"
-              y="0"
-              width="40"
-              height="40"
-              filterUnits="userSpaceOnUse"
-              color-interpolation-filters="sRGB"
-            >
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
-              <feColorMatrix
-                in="SourceAlpha"
-                type="matrix"
-                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                result="hardAlpha"
-              />
-              <feOffset dy="1" />
-              <feGaussianBlur stdDeviation="1" />
-              <feComposite in2="hardAlpha" operator="out" />
-              <feColorMatrix
-                type="matrix"
-                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0"
-              />
-              <feBlend
-                mode="normal"
-                in2="BackgroundImageFix"
-                result="effect1_dropShadow_1370_181"
-              />
-              <feBlend
-                mode="normal"
-                in="SourceGraphic"
-                in2="effect1_dropShadow_1370_181"
-                result="shape"
-              />
-            </filter>
-          </defs>
-        </svg>
-      </button>
+      <div className="w-10 h-10 bg-gray-200 rounded-lg"></div>
     </nav>
   );
 };

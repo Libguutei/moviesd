@@ -1,17 +1,14 @@
 import Nav from "@/app/components/Nav";
 import React from "react";
 
-// Params-ийг Promise хэлбэрээр тодорхойлох нь илүү найдвартай
 export default async function MovieDetail({
   params,
 }: {
   params: Promise<{ id: string }> | { id: string };
 }) {
-  // 1. Params-ийг await хийж авна
   const resolvedParams = await params;
   const { id } = resolvedParams;
 
-  // 2. Датагаа татах
   const res = await fetch(
     `https://api.themoviedb.org/3/movie/${id}?api_key=024dbea23ede015af364eba879a8b264&append_to_response=videos,credits,similar`,
   );
@@ -19,7 +16,6 @@ export default async function MovieDetail({
 
   return (
     <div className="bg-black min-h-screen text-white">
-      {/* 3. 'movies' хувьсагч байхгүй бол Nav-ийг ингэж дуудна */}
       <Nav />
 
       <main className="max-w-6xl mx-auto p-6">
@@ -43,10 +39,10 @@ export default async function MovieDetail({
               className="w-full h-full object-cover opacity-50 absolute inset-0"
               alt="backdrop"
             />
-            {/* Трейлер хэсэг энд орж ирнэ */}
+
             <div className="relative z-10 p-10 flex items-center justify-center h-full">
               <p className="text-zinc-400 italic">
-                Trailer Section or Backdrop View
+                TRAILER HIINE MARTCIHGV IBOL:
               </p>
             </div>
           </div>
