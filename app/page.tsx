@@ -8,42 +8,56 @@ import Top from "./components/Top";
 import Nav from "./components/Nav";
 import Genre from "./components/Genre";
 import Adult from "./components/Adult";
+import Footer from "./components/Footer";
 
 export default function Home() {
   const [isGenreOpen, setIsGenreOpen] = useState(false);
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [visible, setVisible] = useState(5);
+  const [visible, setVisible] = useState(10);
   const [search, setSearch] = useState("");
-  const handleSeeMore = () => {
-    setVisible((prev) => prev + 5);
-  };
 
   useEffect(() => {
-    axios
-      .get(
-        `https://api.themoviedb.org/3/trending/movie/week?api_key=024dbea23ede015af364eba879a8b264`,
-      )
-      .then((res) => {
-        setMovies(res.data.results);
+    const API_KEY = "024dbea23ede015af364eba879a8b264";
+    const BASE_URL = "https://api.themoviedb.org/3";
+
+    const fetchAllMovies = async () => {
+      try {
+        const [trending, popular, upcoming, topRated] = await Promise.all([
+          axios.get(`${BASE_URL}/trending/movie/week?api_key=${API_KEY}`),
+          axios.get(`${BASE_URL}/movie/popular?api_key=${API_KEY}`),
+          axios.get(`${BASE_URL}/movie/upcoming?api_key=${API_KEY}`),
+          axios.get(`${BASE_URL}/movie/top_rated?api_key=${API_KEY}`),
+        ]);
+
+        const combined = [
+          ...trending.data.results,
+          ...popular.data.results,
+          ...upcoming.data.results,
+          ...topRated.data.results,
+        ];
+
+        const uniqueMovies = combined.filter(
+          (movie, index, self) =>
+            index === self.findIndex((m) => m.id === movie.id),
+        );
+
+        setMovies(uniqueMovies);
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
+      } catch (err) {
+        console.error("API Error:", err);
         setLoading(false);
-      });
+      }
+    };
+
+    fetchAllMovies();
   }, []);
 
   if (loading)
     return <div className="p-20 text-center font-bold">bitching...</div>;
 
   return (
-    <div className="min-h-screen bg-white ">
-      {/* <Genre
-        genreIds={
-          movies.slice(0, 20).flatMap((movie: any) => movie.genre_ids) || []
-        }
-      /> */}
+    <div className="min-h-screen bg-white">
       <Nav
         onGenreToggle={() => setIsGenreOpen(!isGenreOpen)}
         search={search}
@@ -56,20 +70,23 @@ export default function Home() {
             <Genre className="absolute z-1 left-82 top-14 bg-gray-100 display-none" />
           </div>
         )}
+
         <Herosection movies={movies.slice(0, 5)} />
+
         <div>
-          <div>
-            <Adult movies={movies.slice(0, visible)} />
-          </div>
-          <Upcoming movies={movies.slice(0, visible)} />{" "}
+          <Adult movies={movies} />
+          <Upcoming movies={movies} />
         </div>
+
         <div>
-          <Popular movies={movies.slice(0, visible)} />
+          <Popular movies={movies.slice(0, 10)} />
         </div>
+
         <div>
-          <Top movies={movies.slice(0, visible)} />
+          <Top movies={movies.slice(0, 30)} />
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

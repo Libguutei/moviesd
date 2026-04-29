@@ -1,7 +1,9 @@
+"use client";
 import React, { useState } from "react";
 import { MovieCard } from "./MovieCards";
 import { Movie } from "../types";
 import SeeMore from "./SeeMore";
+import Link from "next/link";
 
 const Popular = ({ movies }: { movies: any[] }) => {
   const popularList = movies.filter((movie) => {
@@ -12,18 +14,19 @@ const Popular = ({ movies }: { movies: any[] }) => {
       <div>
         <section>
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-zinc-900 dark:text-black">
+            <h2 className="text-2xl font-bold text-zinc-900 dark:text-black pb-4 ">
               Popular
             </h2>
-            <SeeMore movies={movies} />
           </div>
           <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {popularList.map((movie: any) => (
               <MovieCard key={movie.id} movie={movie} />
             ))}
-            <h1 className="text-center text-white col-span-full mt-4 font-bold justify-self-end hover:underline cursor-pointer">
-              See more{" "}
-            </h1>
+            <Link href="/popular">
+              <h1 className="text-center text-black col-span-full mt-4 font-bold justify-self-end hover:underline cursor-pointer">
+                See more{" "}
+              </h1>
+            </Link>
           </div>
         </section>
       </div>
