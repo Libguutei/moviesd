@@ -75,7 +75,7 @@ export default function Home() {
 
         <div>
           <Adult movies={movies} />
-          <Upcoming movies={movies} />
+          <Upcoming />
         </div>
 
         <div>

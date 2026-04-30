@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import SearchResult from "./SearchResult";
 import Link from "next/link";
+import SearchBar from "./SearchBar";
 
 interface NavProps {
   onGenreToggle?: () => void;
@@ -67,17 +68,9 @@ const Nav = ({
         >
           Genre
         </button>
-
         <div className="relative w-[380px]">
-          <input
-            type="text"
-            value={currentSearch}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            placeholder="Search movies..."
-            className="w-full pl-4 pr-10 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm text-black"
-          />
-          {/* Энд SearchResult-ийг дуудаж байна */}
-          <SearchResult movies={currentMovies} search={currentSearch} />
+          {" "}
+          <SearchBar movies={currentMovies} search={currentSearch} />
         </div>
       </div>
       <div className="w-10 h-10 bg-gray-200 rounded-lg"></div>
