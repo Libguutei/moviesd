@@ -1,15 +1,17 @@
 "use client";
 import React from "react";
-import Popular from "../components/Popular";
+import Upcoming from "../components/Upcoming";
 import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 
-export default function PopularPage() {
+export default function UpcomingPage() {
   return (
     <div>
       <Nav />
       <div className="pt-[91px] px-6">
-        <Popular showAll={true} /> {/* ← энэ prop pagination-г идэвхжүүлнэ */}
+        <Upcoming showAll={true} />
       </div>
+      <Footer />
     </div>
   );
 }
